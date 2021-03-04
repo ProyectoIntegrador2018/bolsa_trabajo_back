@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 import * as express from 'express';
 import { AuthRequest } from '../model/AuthRequest';
 
-export const validateFirebaseIdToken =
+export const validateToken =
   async (req: AuthRequest, res: express.Response, next: express.NextFunction) => {
   console.log('Check if request is authorized with Firebase ID token');
 

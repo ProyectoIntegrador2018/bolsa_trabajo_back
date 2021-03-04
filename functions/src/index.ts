@@ -4,6 +4,7 @@ import * as admin from 'firebase-admin';
 import * as express from 'express';
 import * as bodyParser from "body-parser";
 import * as cors from 'cors';
+import { validateToken } from './middleware/validateToken';
 
 //initialize firebase inorder to access its services
 admin.initializeApp(functions.config().firebase);
@@ -16,8 +17,9 @@ app.use(cors({origin: true}))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// api here?
-app.get('/', (req, res) => { res.send('Arquidiocesis Backend').status(200) })
+// api
+app.get('/', (_, res) => { res.send('Alohawaii').status(200) })
+app.get('/auth-check', [validateToken], (_: any, res: any) => { res.send('Auth cheeeeeck').status(200) })
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
 // Requests need to be authorized by providing an `Authorization` HTTP header
