@@ -39,11 +39,12 @@ Aplicación para conectar a la fuerza laboral que es adulto mayor con empleadore
 | Aaron García Guzmán             | A01039597@itesm.mx | Development |
 
 ### Technology Stack
-| Technology    | Version      |
-| ------------- | -------------|
-| Technology 1  | ##.##.##     |
-| Technology 2  | ##.##.##     |
-| Technology 3  | ##.##.##     |
+| Technology             | Version      |
+| ---------------------- | -------------|
+| Node                   | 10.0.0       |
+| TypeScript             | 3.8.0        |
+| Express                | 4.17.1       |
+| Firebase Functions     | 3.6.1        |
 
 ### Management tools
 
