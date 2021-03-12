@@ -1,5 +1,5 @@
-import * as admin from "firebase-admin";
+import admin = require("firebase-admin");
 
-const firestore = admin.firestore();
+const firebase = admin.firestore();
 
-export const UsersCollection = firestore.collection('users');
+export const UsersCollection = firebase.collection('users');
