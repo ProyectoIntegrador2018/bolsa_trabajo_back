@@ -24,13 +24,14 @@ app.get('/auth-check', [validateToken], (_: any, res: any) => { res.send('Auth c
 
 // CRUD example:
 // Create
-app.post('/api/admin', [/*validateToken,*/ isAdmin], (req: any, res: any) => adminService.create(req, res));
+app.post('/api/admin', [validateToken, isAdmin], (req: any, res: any) => adminService.create(req, res));
 // Read
-app.get('/api/admin/:id', (req: any, res: any) => adminService.read(req, res));
+app.get('/api/admin/', (req: any, res: any) => adminService.read(req, res));
 // Update
 app.put('/api/admin/:id', (req: any, res: any) => adminService.update(req, res));
 // Delete
 app.delete('/api/admin/:id', (req: any, res: any) => adminService.deletee(req, res));
+
 
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.

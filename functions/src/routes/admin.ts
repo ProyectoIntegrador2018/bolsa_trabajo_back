@@ -50,18 +50,25 @@ async function create(req: AuthRequest, res: express.Response) {
   };
   const writeResult = await UsersCollection.doc(id).set(admin_obj);
   const userJson = { id, ...admin_obj };
-  console.log(`Admin ${JSON.stringify(userJson)} created at ${writeResult.writeTime}`);
+  console.log(`Admin ${JSON.stringify(userJson)} created at ${writeResult.writeTime} by ${createdBy}`);
   res.status(200).json(userJson);
 }
 
+// Authorization: Only admins can see other admins.
+// Returns a list of every admin users.
 async function read(req: any, res: any) {
-
+  const admins: any[] = []
+  const adminsDoc = await UsersCollection.where("type", "==", "admin").get();
+  adminsDoc.forEach(doc => {
+    admins.push({id: doc.id, ...doc.data()});
+  });
+  res.status(200).json(admins);
 }
 
+// Authorization: Only admins can update other admins.
+// Receives fields to update 
 async function update(req: any, res: any) {
-
 }
 
 async function deletee(req: any, res: any) {
-
 }

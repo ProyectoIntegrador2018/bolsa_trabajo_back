@@ -1,5 +1,7 @@
 # service accoutns
 bolsa-de-trabajo-back-prod.json
+#logs
+functions/firebase-debug.log
 
 # dependencies
 node_modules
