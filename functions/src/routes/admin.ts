@@ -2,7 +2,7 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
-import { ERROR_checkReqFields } from '../helpers/utility';
+import { ERROR_checkReqFields, getUpdateObj, getUserById } from '../helpers/utility';
 import { AuthRequest } from "../model/AuthRequest";
 
 export const adminService = {
@@ -14,6 +14,7 @@ export const adminService = {
 
 // AUTHORIZATION: Only other admins can create admins. (middleware isAdmin)
 async function create(req: AuthRequest, res: express.Response) {
+  if (req.user == undefined) throw "Undefined user.";
   const required_fields = ["username", "phoneNumber", "email", "password"];
   const data = req.body;
 
@@ -22,7 +23,7 @@ async function create(req: AuthRequest, res: express.Response) {
   
   // TODO: Create middleware that validates required fields.
   // Receive this in req sent by the middleware, use this for auditing.
-  const createdBy = "CREADOR-DE-ADMINS";
+  const createdBy = req.user?.id;
   
   // Create admin auth user
   let userRecord = null;
@@ -67,7 +68,23 @@ async function read(req: any, res: any) {
 
 // Authorization: Only admins can update other admins.
 // Receives fields to update 
-async function update(req: any, res: any) {
+async function update(req: AuthRequest, res: any) {
+  if (req.user == undefined) throw "Undefined user.";
+  const possible_fields = ["username", "phoneNumber", "email", "password"];
+  const data = req.body;
+  const obj = getUpdateObj(possible_fields, data);
+  console.log(obj);
+  let writeResult = null;
+  try {
+    writeResult = await UsersCollection.doc(req.user.id).update(obj);
+  } catch (error) {
+    console.error(`Failed to update admin(${req.user.id}):${req.user.username}. ${error}`)
+    res.status(500).json({message: "Failed to update admin."});
+    return;
+  }
+  const new_admin = await getUserById(req.user.id);
+  console.log(`Updated admin from ${req.user} to ${new_admin}, in ${writeResult.writeTime.toDate().toString()}.`);
+  res.status(200).json(new_admin);
 }
 
 async function deletee(req: any, res: any) {

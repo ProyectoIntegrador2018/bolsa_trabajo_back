@@ -1,3 +1,6 @@
+import { User } from "../model/User";
+import { UsersCollection } from "./collections";
+
 // TODO: Move this function to utility
 export function ERROR_checkReqFields(required_fields: string[], data: any) {
   const missing_fields: string[] = [];
@@ -12,4 +15,20 @@ export function ERROR_checkReqFields(required_fields: string[], data: any) {
     // TODO: Create custom ERRORS and an error handler
     throw error_msg;
   }
+}
+
+export function getUpdateObj(possible_fields: string[], data: any) {
+  const obj: any = {};
+  possible_fields.forEach(field => {
+    if (data[field] != undefined) {
+      obj[field] = data[field];
+    }
+  })
+  return obj;
+}
+
+export async function getUserById(id: string): Promise<User> {
+  const user_doc = await UsersCollection.doc(id).get();
+  const user = {id, ...user_doc.data()} as User;
+  return user;
 }

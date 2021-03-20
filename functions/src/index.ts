@@ -28,7 +28,7 @@ app.post('/api/admin', [validateToken, isAdmin], (req: any, res: any) => adminSe
 // Read
 app.get('/api/admin/', (req: any, res: any) => adminService.read(req, res));
 // Update
-app.put('/api/admin/:id', (req: any, res: any) => adminService.update(req, res));
+app.put('/api/admin/', [validateToken, isAdmin], (req: any, res: any) => adminService.update(req, res));
 // Delete
 app.delete('/api/admin/:id', (req: any, res: any) => adminService.deletee(req, res));
 
