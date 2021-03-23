@@ -27,10 +27,10 @@ app.get('/auth-check', [validateToken], (_: any, res: any) => { res.send('Auth c
 app.post('/api/admin', [validateToken, isAdmin], (req: any, res: any) => adminService.create(req, res));
 // Read
 app.get('/api/admin/', (req: any, res: any) => adminService.read(req, res));
-// Update
-app.put('/api/admin/', [validateToken, isAdmin], (req: any, res: any) => adminService.update(req, res));
-// Delete
-app.delete('/api/admin/:id', (req: any, res: any) => adminService.deletee(req, res));
+// Update: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
+app.put('/api/admin/:id', [validateToken, isAdmin], (req: any, res: any) => adminService.update(req, res));
+// Delete: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
+app.delete('/api/admin/:id', [validateToken, isAdmin], (req: any, res: any) => adminService.deletee(req, res));
 
 
 

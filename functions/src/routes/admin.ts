@@ -12,6 +12,13 @@ export const adminService = {
   deletee,
 };
 
+/*
+  Default structure for 200/500 json resposes.
+  result: {
+    message: "Message indicating success."
+  }
+*/
+
 // AUTHORIZATION: Only other admins can create admins. (middleware isAdmin)
 async function create(req: AuthRequest, res: express.Response) {
   if (req.user == undefined) throw "Undefined user.";
@@ -37,7 +44,7 @@ async function create(req: AuthRequest, res: express.Response) {
     });
   } catch (error) {
     console.error(`Couldn't create auth user. ${error}`);
-    res.status(403).send("No se pudo crear el usuario.");
+    res.status(403).json({message: "No se pudo crear el usuario."});
     return;
   }
 
@@ -53,6 +60,7 @@ async function create(req: AuthRequest, res: express.Response) {
   const userJson = { id, ...admin_obj };
   console.log(`Admin ${JSON.stringify(userJson)} created at ${writeResult.writeTime} by ${createdBy}`);
   res.status(200).json(userJson);
+  return;
 }
 
 // Authorization: Only admins can see other admins.
@@ -64,6 +72,7 @@ async function read(req: any, res: any) {
     admins.push({id: doc.id, ...doc.data()});
   });
   res.status(200).json(admins);
+  return;
 }
 
 // Authorization: Only admins can update other admins.
@@ -85,7 +94,29 @@ async function update(req: AuthRequest, res: any) {
   const new_admin = await getUserById(req.user.id);
   console.log(`Updated admin from ${req.user} to ${new_admin}, in ${writeResult.writeTime.toDate().toString()}.`);
   res.status(200).json(new_admin);
+  return;
 }
 
-async function deletee(req: any, res: any) {
+async function deletee(req: AuthRequest, res: any) {
+  if (req.user == undefined) throw "Undefined user.";
+  console.log(`Deleting admin(${req.user.id}):${req.user.username}.`)
+  
+  try {
+    await admin.auth().deleteUser(req.user.id);
+    console.log(`Deleted admin(${req.user.id}):${req.user.username}, in ${Date().toString()}.`)
+  } catch (error) {
+    console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from Google Auth. ${error}`)
+    res.status(500).json({message: "Failed to delete admin."});
+    return;
+  }
+
+  try {
+    const writeResult = await UsersCollection.doc(req.user.id).delete();
+    console.log(`Deleted admin(${req.user.id}):${req.user.username}, in ${writeResult.writeTime.toDate().toString()}.`)
+  } catch (error) {
+    console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from users Collection. ${error}`)
+  }
+
+  res.status(200).json({message: "Deleted admin succesfully."})
+  return;
 }
