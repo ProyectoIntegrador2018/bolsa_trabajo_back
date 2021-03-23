@@ -65,7 +65,7 @@ async function create(req: AuthRequest, res: express.Response) {
 
 // Authorization: Only admins can see other admins.
 // Returns a list of every admin users.
-async function read(req: any, res: any) {
+async function read(req: AuthRequest, res: any) {
   const admins: any[] = []
   const adminsDoc = await UsersCollection.where("type", "==", "admin").get();
   adminsDoc.forEach(doc => {
@@ -103,7 +103,7 @@ async function deletee(req: AuthRequest, res: any) {
   
   try {
     await admin.auth().deleteUser(req.user.id);
-    console.log(`Deleted admin(${req.user.id}):${req.user.username}, in ${Date().toString()}.`)
+    console.log(`Deleted admin(${req.user.id}):${req.user.username}, from Google Auth in ${Date().toString()}.`)
   } catch (error) {
     console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from Google Auth. ${error}`)
     res.status(500).json({message: "Failed to delete admin."});
@@ -112,9 +112,9 @@ async function deletee(req: AuthRequest, res: any) {
 
   try {
     const writeResult = await UsersCollection.doc(req.user.id).delete();
-    console.log(`Deleted admin(${req.user.id}):${req.user.username}, in ${writeResult.writeTime.toDate().toString()}.`)
+    console.log(`Deleted admin(${req.user.id}):${req.user.username}, from Users Collection in ${writeResult.writeTime.toDate().toString()}.`)
   } catch (error) {
-    console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from users Collection. ${error}`)
+    console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from Users Collection. ${error}`)
   }
 
   res.status(200).json({message: "Deleted admin succesfully."})
