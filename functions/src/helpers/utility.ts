@@ -32,3 +32,24 @@ export async function getUserById(id: string): Promise<User> {
   const user = {id, ...user_doc.data()} as User;
   return user;
 }
+
+export function validateRequest(req: any, res: any, next: any, schema: any) {
+  console.log("Entrant request:");
+  console.log(req.body);
+  const options = {
+    abortEarly: false, // include all errors
+    allowUnknown: true, // ignore unknown props
+    stripUnknown: true // remove unknown props
+  };
+  const { error, value } = schema.validate(req.body, options);
+  if (error) {
+    // TODO: Fix this message to only contain missing fields.
+    // const message = `Validation error: ${error.details.map((x: any) => x.message).join(', ')}`;
+    res.status(403).json({message: "Missing fields"})
+  } else {
+    req.body = value;
+    console.log("Validated request:")
+    console.log(req.body)
+    next();
+  }
+}

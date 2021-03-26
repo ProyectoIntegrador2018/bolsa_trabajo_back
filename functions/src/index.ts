@@ -9,6 +9,7 @@ import * as cors from 'cors';
 import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
 import { isAdmin } from './middleware/isAdmin';
+import { createAdminSchema } from './middleware/schemas/createAdminSchema';
 
 //initialize express server
 const app = express();
@@ -24,7 +25,7 @@ app.get('/auth-check', [validateToken], (_: any, res: any) => { res.send('Auth c
 
 // CRUD example:
 // Create
-app.post('/api/admin', [validateToken, isAdmin], (req: any, res: any) => adminService.create(req, res));
+app.post('/api/admin', [validateToken, isAdmin, createAdminSchema], (req: any, res: any) => adminService.create(req, res));
 // Read
 app.get('/api/admin/', [validateToken, isAdmin], (req: any, res: any) => adminService.read(req, res));
 // Update: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)

@@ -58,7 +58,7 @@ async function create(req: AuthRequest, res: express.Response) {
   };
   const writeResult = await UsersCollection.doc(id).set(admin_obj);
   const userJson = { id, ...admin_obj };
-  console.log(`Admin ${JSON.stringify(userJson)} created at ${writeResult.writeTime} by ${createdBy}`);
+  console.log(`Admin ${JSON.stringify(userJson)} created at ${writeResult.writeTime.toDate().toString()} by ${createdBy}`);
   res.status(200).json(userJson);
   return;
 }
@@ -88,7 +88,7 @@ async function update(req: AuthRequest, res: any) {
     writeResult = await UsersCollection.doc(req.user.id).update(obj);
   } catch (error) {
     console.error(`Failed to update admin(${req.user.id}):${req.user.username}. ${error}`)
-    res.status(500).json({message: "Failed to update admin."});
+    res.status(403).json({message: "Failed to update admin."});
     return;
   }
   const new_admin = await getUserById(req.user.id);
@@ -106,7 +106,7 @@ async function deletee(req: AuthRequest, res: any) {
     console.log(`Deleted admin(${req.user.id}):${req.user.username}, from Google Auth in ${Date().toString()}.`)
   } catch (error) {
     console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from Google Auth. ${error}`)
-    res.status(500).json({message: "Failed to delete admin."});
+    res.status(403).json({message: "Failed to delete admin."});
     return;
   }
 
