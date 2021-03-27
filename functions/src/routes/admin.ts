@@ -2,7 +2,7 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
-import { ERROR_checkReqFields, getUpdateObj, getUserById } from '../helpers/utility';
+import { getUpdateObj, getUserById } from '../helpers/utility';
 import { AuthRequest } from "../model/AuthRequest";
 
 export const adminService = {
@@ -22,12 +22,8 @@ export const adminService = {
 // AUTHORIZATION: Only other admins can create admins. (middleware isAdmin)
 async function create(req: AuthRequest, res: express.Response) {
   if (req.user == undefined) throw "Undefined user.";
-  const required_fields = ["username", "phoneNumber", "email", "password"];
   const data = req.body;
 
-  // This ends execution onError
-  ERROR_checkReqFields(required_fields, data);
-  
   // TODO: Create middleware that validates required fields.
   // Receive this in req sent by the middleware, use this for auditing.
   const createdBy = req.user?.id;
@@ -77,9 +73,11 @@ async function read(req: AuthRequest, res: any) {
 
 // Authorization: Only admins can update other admins.
 // Receives fields to update 
+// TODO: Update password, from front end with FIREBASE AUTH LIBRARY:
+//       https://firebase.google.com/docs/auth/web/manage-users#set_a_users_password
 async function update(req: AuthRequest, res: any) {
   if (req.user == undefined) throw "Undefined user.";
-  const possible_fields = ["username", "phoneNumber", "email", "password"];
+  const possible_fields = ["username", "phoneNumber", "email"];
   const data = req.body;
   const obj = getUpdateObj(possible_fields, data);
   console.log(obj);

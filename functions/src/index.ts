@@ -8,8 +8,8 @@ import * as bodyParser from "body-parser";
 import * as cors from 'cors';
 import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
-import { isAdmin } from './middleware/isAdmin';
-import { createAdminSchema } from './middleware/schemas/createAdminSchema';
+import { adminSchema } from './middleware/schemas/adminSchema';
+import { isMinAdmin } from './middleware/userTypes';
 
 //initialize express server
 const app = express();
@@ -25,13 +25,13 @@ app.get('/auth-check', [validateToken], (_: any, res: any) => { res.send('Auth c
 
 // CRUD example:
 // Create
-app.post('/api/admin', [validateToken, isAdmin, createAdminSchema], (req: any, res: any) => adminService.create(req, res));
+app.post('/api/admin', [validateToken, isMinAdmin, adminSchema.create], (req: any, res: any) => adminService.create(req, res));
 // Read
-app.get('/api/admin/', [validateToken, isAdmin], (req: any, res: any) => adminService.read(req, res));
+app.get('/api/admin/', [validateToken, isMinAdmin, adminSchema.read], (req: any, res: any) => adminService.read(req, res));
 // Update: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
-app.put('/api/admin/:id', [validateToken, isAdmin], (req: any, res: any) => adminService.update(req, res));
+app.put('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.update], (req: any, res: any) => adminService.update(req, res));
 // Delete: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
-app.delete('/api/admin/:id', [validateToken, isAdmin], (req: any, res: any) => adminService.deletee(req, res));
+app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (req: any, res: any) => adminService.deletee(req, res));
 
 
 
