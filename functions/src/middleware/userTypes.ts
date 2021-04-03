@@ -1,5 +1,6 @@
 import * as express from 'express';
-import { kPERMISISON_NUMBER, kUSERS } from '../helpers/constants';
+import { kUSERS } from '../helpers/constants';
+import { hasPermission } from '../helpers/utility';
 import { AuthRequest } from '../model/AuthRequest';
 
 // Usage:
@@ -7,9 +8,7 @@ import { AuthRequest } from '../model/AuthRequest';
 //      desiredUserType => admin
 //      currUserType => req.user?.type
 function isMin(desiredUserType: string, currUserType: string | undefined): boolean {
-  const currPermValue = kPERMISISON_NUMBER.get(currUserType);
-  const desiredPermValue = kPERMISISON_NUMBER.get(desiredUserType);
-  return currPermValue >= desiredPermValue;
+  return hasPermission(desiredUserType, currUserType);
 }
 
 export const isEmployee =

@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+import { kUSERS } from '../../helpers/constants';
 import { validateRequest } from '../../helpers/utility';
 
 export const adminSchema = {
@@ -14,6 +15,9 @@ export function create(req: any, res: any, next: any) {
         email: Joi.string().email().required(),
         password: Joi.string().min(6).required(),
         phoneNumber: Joi.string().trim().regex(/^\+[0-9]{10}$/).required(),
+        type: Joi.string()
+            .valid(...[kUSERS.employee, kUSERS.admin, kUSERS.superAdmin])
+            .required(),
     });
     validateRequest(req, res, next, schema);
 }

@@ -2,7 +2,7 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
-import { getUpdateObj, getUserById } from '../helpers/utility';
+import { getUpdateObj, getUserById, hasPermission } from '../helpers/utility';
 import { AuthRequest } from "../model/AuthRequest";
 
 export const adminService = {
@@ -24,6 +24,11 @@ async function create(req: AuthRequest, res: express.Response) {
   if (req.user == undefined) throw "Undefined user.";
   const data = req.body;
 
+  if (!hasPermission(req.body.type, req.user?.type)) {
+    res.status(401).json({message: "Unauthorized"});
+    return;
+  }
+  
   // TODO: Create middleware that validates required fields.
   // Receive this in req sent by the middleware, use this for auditing.
   const createdBy = req.user?.id;
@@ -49,12 +54,12 @@ async function create(req: AuthRequest, res: express.Response) {
   const admin_obj = {
     username: data.username,
     email: data.email,
-    type: "admin",
+    type: data.type,
     createdBy,
   };
   const writeResult = await UsersCollection.doc(id).set(admin_obj);
   const userJson = { id, ...admin_obj };
-  console.log(`Admin ${JSON.stringify(userJson)} created at ${writeResult.writeTime.toDate().toString()} by ${createdBy}`);
+  console.log(`${req.body.type} ${JSON.stringify(userJson)} created at ${writeResult.writeTime.toDate().toString()} by ${createdBy}`);
   res.status(200).json(userJson);
   return;
 }

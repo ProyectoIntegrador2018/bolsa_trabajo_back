@@ -1,5 +1,6 @@
 import { User } from "../model/User";
 import { UsersCollection } from "./collections";
+import { kPERMISISON_NUMBER } from "./constants";
 
 // TODO: Move this function to utility
 export function ERROR_checkReqFields(required_fields: string[], data: any) {
@@ -15,6 +16,16 @@ export function ERROR_checkReqFields(required_fields: string[], data: any) {
     // TODO: Create custom ERRORS and an error handler
     throw error_msg;
   }
+}
+
+// Usage:
+//   If you want a user that is at least an admin,
+//      desiredUserType => admin
+//      currUserType => req.user?.type
+export function hasPermission(desiredUserType: string, currUserType: string | undefined): boolean {
+  const currPermValue = kPERMISISON_NUMBER.get(currUserType);
+  const desiredPermValue = kPERMISISON_NUMBER.get(desiredUserType);
+  return currPermValue >= desiredPermValue;
 }
 
 export function getUpdateObj(possible_fields: string[], data: any) {
