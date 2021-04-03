@@ -38,6 +38,10 @@ export function getUpdateObj(possible_fields: string[], data: any) {
   return obj;
 }
 
+export function getAdminFormat(admin: User) {
+  return `${admin.type}(${admin.id}):${admin.username}`;
+}
+
 export async function getUserById(id: string): Promise<User> {
   const user_doc = await UsersCollection.doc(id).get();
   const user = {id, ...user_doc.data()} as User;

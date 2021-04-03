@@ -29,9 +29,13 @@ export function read(req: any, res: any, next: any) {
 
 export function update(req: any, res: any, next: any) {
     const schema = Joi.object({
-        username: Joi.string().required(),
-        email: Joi.string().email().required(),
-        phoneNumber: Joi.string().trim().regex(/^\+[0-9]{10}$/).required(),
+        username: Joi.string(),
+        email: Joi.string().email(),
+        phoneNumber: Joi.string().trim().regex(/^\+[0-9]{10}$/),
+        password: Joi.string().min(6).required(),
+        type: Joi.string()
+            .valid(...[kUSERS.employee, kUSERS.admin, kUSERS.superAdmin])
+            .required(),
     });
     validateRequest(req, res, next, schema);
 }

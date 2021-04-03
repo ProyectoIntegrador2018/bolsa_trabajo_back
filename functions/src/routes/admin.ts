@@ -3,7 +3,7 @@ import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
 import { kADMIN_TYPES } from '../helpers/constants';
-import { getUpdateObj, getUserById, hasPermission } from '../helpers/utility';
+import { getAdminFormat, getUpdateObj, getUserById, hasPermission } from '../helpers/utility';
 import { AuthRequest } from "../model/AuthRequest";
 import { User } from '../model/User';
 
@@ -98,21 +98,43 @@ async function read(req: AuthRequest, res: any) {
 //       https://firebase.google.com/docs/auth/web/manage-users#set_a_users_password
 async function update(req: AuthRequest, res: any) {
   if (req.user == undefined) throw "Undefined user.";
-  const possible_fields = ["username", "phoneNumber", "email"];
   const data = req.body;
-  const obj = getUpdateObj(possible_fields, data);
-  console.log(obj);
+  const userId = req.params.id;
+  let desiredAdmin = null;
+  //TODO: Check that they have permissions to update desired admin.
+  try {
+    desiredAdmin = await getUserById(userId);
+  } catch (error) {
+    console.error(`User with id ${userId} doesn't exist.`);
+    res.status(403).json({message: "Admin doesn't exist."})
+    return;
+  }
+
+  // Check if we have permission to update desired user
+  if (!hasPermission(desiredAdmin.type, req.user?.type)) {
+    res.status(401).json({message: "Unauthorized"});
+    return;
+  }
+
   let writeResult = null;
   try {
-    writeResult = await UsersCollection.doc(req.user.id).update(obj);
+    // Update auth
+    const updateAdmin = await admin.auth().updateUser(userId, 
+      getUpdateObj(["email", "phoneNumber", "password"], data));
+    console.log("UPDATED ADMIN");
+    console.log(updateAdmin);
+    // Update database
+    writeResult = await UsersCollection.doc(userId).update(
+      getUpdateObj(["email", "type", "username"], data));
   } catch (error) {
-    console.error(`Failed to update admin(${req.user.id}):${req.user.username}. ${error}`)
+    console.error(`Failed to update admin(${userId}):${desiredAdmin.username}. ${error}`)
     res.status(403).json({message: "Failed to update admin."});
     return;
   }
-  const new_admin = await getUserById(req.user.id);
-  console.log(`Updated admin from ${req.user} to ${new_admin}, in ${writeResult.writeTime.toDate().toString()}.`);
-  res.status(200).json(new_admin);
+  
+  const updatedAdmin = await getUserById(userId);
+  console.log(`${getAdminFormat(req.user)} Updated from ${getAdminFormat(desiredAdmin)} to ${getAdminFormat(updatedAdmin)}, in ${writeResult.writeTime.toDate().toString()}.`);
+  res.status(200).json(updatedAdmin);
   return;
 }
 
