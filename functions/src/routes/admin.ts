@@ -2,8 +2,10 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
+import { kADMIN_TYPES } from '../helpers/constants';
 import { getUpdateObj, getUserById, hasPermission } from '../helpers/utility';
 import { AuthRequest } from "../model/AuthRequest";
+import { User } from '../model/User';
 
 export const adminService = {
   create,
@@ -64,13 +66,27 @@ async function create(req: AuthRequest, res: express.Response) {
   return;
 }
 
+function getAdminsICanSee(adminType: string) {
+  const admins: any = [];
+  kADMIN_TYPES.forEach(currType => {
+    if (hasPermission(currType, adminType)) {
+      admins.push(currType);
+    }
+  });
+  return admins;
+}
+
 // Authorization: Only admins can see other admins.
 // Returns a list of every admin users.
 async function read(req: AuthRequest, res: any) {
-  const admins: any[] = []
-  const adminsDoc = await UsersCollection.where("type", "==", "admin").get();
+  if (req.user == undefined) throw "Undefined user.";
+  const admins: any = {}
+  const adminTypes = getAdminsICanSee(req.user.type);
+  adminTypes.forEach((adminType: string) => { admins[`${adminType}s`] = []; });
+  const adminsDoc = await UsersCollection.where("type", "in", adminTypes).get();
   adminsDoc.forEach(doc => {
-    admins.push({id: doc.id, ...doc.data()});
+    const currAdmin = {id: doc.id, ...doc.data()} as User;
+    admins[`${currAdmin.type}s`].push(currAdmin);
   });
   res.status(200).json(admins);
   return;
