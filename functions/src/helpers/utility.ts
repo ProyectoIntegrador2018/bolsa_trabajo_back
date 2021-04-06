@@ -60,6 +60,7 @@ export function validateRequest(req: any, res: any, next: any, schema: any) {
   if (error) {
     // TODO: Fix this message to only contain missing fields.
     // const message = `Validation error: ${error.details.map((x: any) => x.message).join(', ')}`;
+    console.error(error);
     res.status(403).json({message: "Missing fields"})
   } else {
     req.body = value;
@@ -67,4 +68,8 @@ export function validateRequest(req: any, res: any, next: any, schema: any) {
     console.log(req.body)
     next();
   }
+}
+
+export function phoneNumberRegex(): RegExp {
+  return /^\+[0-9][0-9]?[0-9]{10}$/;
 }

@@ -2,7 +2,7 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
-import { kADMIN_TYPES } from '../helpers/constants';
+import { kADMIN_TYPES, kUSER_STATES } from '../helpers/constants';
 import { getAdminFormat, getUpdateObj, getUserById, hasPermission } from '../helpers/utility';
 import { AuthRequest } from "../model/AuthRequest";
 import { User } from '../model/User';
@@ -57,6 +57,7 @@ async function create(req: AuthRequest, res: express.Response) {
     username: data.username,
     email: data.email,
     type: data.type,
+    state: kUSER_STATES.active,
     createdBy,
   };
   const writeResult = await UsersCollection.doc(id).set(admin_obj);
@@ -125,7 +126,7 @@ async function update(req: AuthRequest, res: any) {
     console.log(updateAdmin);
     // Update database
     writeResult = await UsersCollection.doc(userId).update(
-      getUpdateObj(["email", "type", "username"], data));
+      getUpdateObj(["email", "type", "username", "state"], data));
   } catch (error) {
     console.error(`Failed to update admin(${userId}):${desiredAdmin.username}. ${error}`)
     res.status(403).json({message: "Failed to update admin."});
@@ -138,6 +139,7 @@ async function update(req: AuthRequest, res: any) {
   return;
 }
 
+// TODO: Make it so that we can delete other admins, not only ourselves.
 async function deletee(req: AuthRequest, res: any) {
   if (req.user == undefined) throw "Undefined user.";
   console.log(`Deleting admin(${req.user.id}):${req.user.username}.`)

@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
-import { kUSERS } from '../../helpers/constants';
-import { validateRequest } from '../../helpers/utility';
+import { kUSERS, kUSER_STATES } from '../../helpers/constants';
+import { phoneNumberRegex, validateRequest } from '../../helpers/utility';
 
 export const adminSchema = {
   create,
@@ -14,9 +14,9 @@ export function create(req: any, res: any, next: any) {
         username: Joi.string().required(),
         email: Joi.string().email().required(),
         password: Joi.string().min(6).required(),
-        phoneNumber: Joi.string().trim().regex(/^\+[0-9]{10}$/).required(),
+        phoneNumber: Joi.string().trim().regex(phoneNumberRegex()).required(),
         type: Joi.string()
-            .valid(...[kUSERS.employee, kUSERS.admin, kUSERS.superAdmin])
+            .valid(...[kUSERS.employee, kUSERS.company, kUSERS.admin, kUSERS.superAdmin,])
             .required(),
     });
     validateRequest(req, res, next, schema);
@@ -31,11 +31,12 @@ export function update(req: any, res: any, next: any) {
     const schema = Joi.object({
         username: Joi.string(),
         email: Joi.string().email(),
-        phoneNumber: Joi.string().trim().regex(/^\+[0-9]{10}$/),
-        password: Joi.string().min(6).required(),
+        phoneNumber: Joi.string().trim().regex(phoneNumberRegex()),
+        password: Joi.string().min(6),
         type: Joi.string()
-            .valid(...[kUSERS.employee, kUSERS.admin, kUSERS.superAdmin])
-            .required(),
+            .valid(...[kUSERS.employee, kUSERS.admin, kUSERS.superAdmin]),
+        state: Joi.string()
+            .valid(...[kUSER_STATES.active, kUSER_STATES.inactive])
     });
     validateRequest(req, res, next, schema);
 }
