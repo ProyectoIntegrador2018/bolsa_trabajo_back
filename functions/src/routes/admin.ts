@@ -142,22 +142,40 @@ async function update(req: AuthRequest, res: any) {
 // TODO: Make it so that we can delete other admins, not only ourselves.
 async function deletee(req: AuthRequest, res: any) {
   if (req.user == undefined) throw "Undefined user.";
-  console.log(`Deleting admin(${req.user.id}):${req.user.username}.`)
+  
+  const userId = req.params.id;
+  let desiredAdmin = null;
+  //TODO: Check that they have permissions to delete desired admin.
+  try {
+    desiredAdmin = await getUserById(userId);
+  } catch (error) {
+    console.error(`User with id ${userId} doesn't exist.`);
+    res.status(403).json({message: "User doesn't exist."})
+    return;
+  }
+
+  console.log(`Deleting ${getAdminFormat(desiredAdmin)}.`)
+
+  // Check if we have permission to update desired user
+  if (!hasPermission(desiredAdmin.type, req.user?.type)) {
+    res.status(401).json({message: "Unauthorized"});
+    return;
+  }
   
   try {
-    await admin.auth().deleteUser(req.user.id);
-    console.log(`Deleted admin(${req.user.id}):${req.user.username}, from Google Auth in ${Date().toString()}.`)
+    await admin.auth().deleteUser(desiredAdmin.id);
+    console.log(`${getAdminFormat(req.user)} deleted ${getAdminFormat(desiredAdmin)}, from Google Auth in ${Date().toString()}.`)
   } catch (error) {
-    console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from Google Auth. ${error}`)
+    console.error(`Failed to delete ${getAdminFormat(desiredAdmin)} from Google Auth. ${error}`)
     res.status(403).json({message: "Failed to delete admin."});
     return;
   }
 
   try {
-    const writeResult = await UsersCollection.doc(req.user.id).delete();
-    console.log(`Deleted admin(${req.user.id}):${req.user.username}, from Users Collection in ${writeResult.writeTime.toDate().toString()}.`)
+    const writeResult = await UsersCollection.doc(desiredAdmin.id).delete();
+    console.log(`${getAdminFormat(req.user)} deleted ${getAdminFormat(desiredAdmin)}, from Users Collection in ${writeResult.writeTime.toDate().toString()}.`)
   } catch (error) {
-    console.error(`Failed to delete admin(${req.user.id}):${req.user.username} from Users Collection. ${error}`)
+    console.error(`Failed to delete ${getAdminFormat(desiredAdmin)} from Users Collection. ${error}`)
   }
 
   res.status(200).json({message: "Deleted admin succesfully."})

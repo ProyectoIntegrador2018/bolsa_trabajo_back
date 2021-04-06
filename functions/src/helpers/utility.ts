@@ -44,6 +44,7 @@ export function getAdminFormat(admin: User) {
 
 export async function getUserById(id: string): Promise<User> {
   const user_doc = await UsersCollection.doc(id).get();
+  if (!user_doc.exists) throw `User with id(${id} doesn't exist.)`;
   const user = {id, ...user_doc.data()} as User;
   return user;
 }

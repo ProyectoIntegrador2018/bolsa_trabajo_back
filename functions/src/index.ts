@@ -10,6 +10,8 @@ import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
 import { adminSchema } from './middleware/schemas/adminSchema';
 import { isMinAdmin } from './middleware/userTypes';
+import { userSchema } from './middleware/schemas/userSchema';
+import { userService } from './routes/user';
 
 //initialize express server
 const app = express();
@@ -23,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/', (_, res) => { res.send('Alohawaii').status(200) })
 app.get('/auth-check', [validateToken], (_: any, res: any) => { res.send('Auth cheeeeeck').status(200) })
 
-// CRUD example:
+// ADMINS(kinda) CRUD:
 // Create
 app.post('/api/admin', [validateToken, isMinAdmin, adminSchema.create], (req: any, res: any) => adminService.create(req, res));
 // Read
@@ -33,6 +35,9 @@ app.put('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.update], (req:
 // Delete: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
 app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (req: any, res: any) => adminService.deletee(req, res));
 
+// USERS CRUD?:
+// Create: Register for 'employee' and 'company' users.
+app.post('/api/user', [userSchema.register], (req: any, res: any) => userService.register(req, res));
 
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
