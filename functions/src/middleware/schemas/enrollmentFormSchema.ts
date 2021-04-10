@@ -1,5 +1,7 @@
 import Joi = require("joi");
+import { kUSERS } from "../../helpers/constants";
 import { validateRequest } from "../../helpers/utility";
+import { AuthRequest } from "../../model/AuthRequest";
 
 const actividadDeseadaSchema = {
   jornada_de_trabajo: Joi.string().required(),
@@ -10,8 +12,13 @@ const actividadDeseadaSchema = {
 };
 const posicionVacanteSchema = actividadDeseadaSchema;
 
+export function formSchema(req: AuthRequest, res: any, next: any) {
+  const schema = req.user?.type == kUSERS.employee ? getEmployeeSchema() : getCompanySchema();
+  validateRequest(req, res, next, schema);
+}
+
 // TODO: Validate fields way more strictly, add regexes, etc.
-export function employeeForm(req: any, res: any, next: any) {
+function getEmployeeSchema() {
     const institFechasParSchema = Joi.object({
       institucion: Joi.string().required(),
       fechas: Joi.string().required(),
@@ -55,11 +62,11 @@ export function employeeForm(req: any, res: any, next: any) {
         })
         
     });
-    validateRequest(req, res, next, schema);
+    return schema;
 }
 
 // TODO: Validate fields way more strictly, add regexes, etc.
-export function companyForm(req: any, res: any, next: any) {
+function getCompanySchema() {
     const schema = Joi.object({
         nombre_empresa: Joi.string().required(),
         direccion_actual: Joi.string().required(),
@@ -88,5 +95,5 @@ export function companyForm(req: any, res: any, next: any) {
         })
         
     });
-    validateRequest(req, res, next, schema);
+    return schema;
 }

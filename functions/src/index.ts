@@ -9,9 +9,10 @@ import * as cors from 'cors';
 import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
 import { adminSchema } from './middleware/schemas/adminSchema';
-import { isMinAdmin } from './middleware/userTypes';
+import { isEmployeeOrCompany, isMinAdmin } from './middleware/userTypes';
 import { userSchema } from './middleware/schemas/userSchema';
 import { userService } from './routes/user';
+import { formSchema } from './middleware/schemas/enrollmentFormSchema';
 
 //initialize express server
 const app = express();
@@ -38,6 +39,10 @@ app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (
 // USERS CRUD?:
 // Create: Register for 'employee' and 'company' users.
 app.post('/api/user', [userSchema.register], (req: any, res: any) => userService.register(req, res));
+
+
+// ENROLLMENT FORMS
+app.post('/api/user/enrollment-form', [validateToken, isEmployeeOrCompany, formSchema], (req: any, res: any) => { res.send('Enrollment form endpoint.').status(200) });
 
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
