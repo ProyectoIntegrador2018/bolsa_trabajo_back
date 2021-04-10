@@ -1,8 +1,8 @@
-export const kUSERS = {
-  employee: "employee",
-  company: "company",
-  admin: "admin",
-  superAdmin: "super-admin",
+export enum kUSERS {
+  employee = "employee",
+  company = "company",
+  admin = "admin",
+  superAdmin = "super-admin",
 };
 
 export const kADMIN_TYPES = [
