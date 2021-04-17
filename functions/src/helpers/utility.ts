@@ -28,7 +28,7 @@ export function hasPermission(desiredUserType: string, currUserType: string | un
   return currPermValue >= desiredPermValue;
 }
 
-export function getUpdateObj(possible_fields: string[], data: any) {
+export function getObjFromData(possible_fields: string[], data: any) {
   const obj: any = {};
   possible_fields.forEach(field => {
     if (data[field] != undefined) {
@@ -38,8 +38,8 @@ export function getUpdateObj(possible_fields: string[], data: any) {
   return obj;
 }
 
-export function getAdminFormat(admin: User) {
-  return `${admin.type}(${admin.id}):${admin.username}`;
+export function getUserFormat(user: User) {
+  return `${user.type}(${user.id}):${user.username}`;
 }
 
 export async function getUserById(id: string): Promise<User> {
@@ -69,6 +69,14 @@ export function validateRequest(req: any, res: any, next: any, schema: any) {
     console.log(req.body)
     next();
   }
+}
+
+export function getWriteResultDate(writeResult: FirebaseFirestore.WriteResult): string {
+  return writeResult.writeTime.toDate().toString();
+}
+
+export function getCurrSeconds() {
+  return Math.floor(Date.now() / 1000);
 }
 
 export function phoneNumberRegex(): RegExp {

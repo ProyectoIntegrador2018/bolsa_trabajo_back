@@ -13,6 +13,7 @@ import { isEmployeeOrCompany, isMinAdmin } from './middleware/userTypes';
 import { userSchema } from './middleware/schemas/userSchema';
 import { userService } from './routes/user';
 import { formSchema } from './middleware/schemas/enrollmentFormSchema';
+import { enrollmentService } from './routes/enrollment';
 
 //initialize express server
 const app = express();
@@ -42,7 +43,7 @@ app.post('/api/user', [userSchema.register], (req: any, res: any) => userService
 
 
 // ENROLLMENT FORMS
-app.post('/api/user/enrollment-form', [validateToken, isEmployeeOrCompany, formSchema], (req: any, res: any) => { res.send('Enrollment form endpoint.').status(200) });
+app.post('/api/user/enrollment-form', [validateToken, isEmployeeOrCompany, formSchema], (req: any, res: any) => enrollmentService.createFormat(req, res));
 
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.

@@ -3,7 +3,7 @@ import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
 import { kADMIN_TYPES, kUSER_STATES } from '../helpers/constants';
-import { getAdminFormat, getUpdateObj, getUserById, hasPermission } from '../helpers/utility';
+import { getUserFormat, getObjFromData, getUserById, hasPermission } from '../helpers/utility';
 import { AuthRequest } from "../model/AuthRequest";
 import { User } from '../model/User';
 
@@ -121,12 +121,12 @@ async function update(req: AuthRequest, res: any) {
   try {
     // Update auth
     const updateAdmin = await admin.auth().updateUser(userId, 
-      getUpdateObj(["email", "phoneNumber", "password"], data));
+      getObjFromData(["email", "phoneNumber", "password"], data));
     console.log("UPDATED ADMIN");
     console.log(updateAdmin);
     // Update database
     writeResult = await UsersCollection.doc(userId).update(
-      getUpdateObj(["email", "type", "username", "state"], data));
+      getObjFromData(["email", "type", "username", "state"], data));
   } catch (error) {
     console.error(`Failed to update admin(${userId}):${desiredAdmin.username}. ${error}`)
     res.status(403).json({message: "Failed to update admin."});
@@ -134,7 +134,7 @@ async function update(req: AuthRequest, res: any) {
   }
   
   const updatedAdmin = await getUserById(userId);
-  console.log(`${getAdminFormat(req.user)} Updated from ${getAdminFormat(desiredAdmin)} to ${getAdminFormat(updatedAdmin)}, in ${writeResult.writeTime.toDate().toString()}.`);
+  console.log(`${getUserFormat(req.user)} Updated from ${getUserFormat(desiredAdmin)} to ${getUserFormat(updatedAdmin)}, in ${writeResult.writeTime.toDate().toString()}.`);
   res.status(200).json(updatedAdmin);
   return;
 }
@@ -154,7 +154,7 @@ async function deletee(req: AuthRequest, res: any) {
     return;
   }
 
-  console.log(`Deleting ${getAdminFormat(desiredAdmin)}.`)
+  console.log(`Deleting ${getUserFormat(desiredAdmin)}.`)
 
   // Check if we have permission to update desired user
   if (!hasPermission(desiredAdmin.type, req.user?.type)) {
@@ -164,18 +164,18 @@ async function deletee(req: AuthRequest, res: any) {
   
   try {
     await admin.auth().deleteUser(desiredAdmin.id);
-    console.log(`${getAdminFormat(req.user)} deleted ${getAdminFormat(desiredAdmin)}, from Google Auth in ${Date().toString()}.`)
+    console.log(`${getUserFormat(req.user)} deleted ${getUserFormat(desiredAdmin)}, from Google Auth in ${Date().toString()}.`)
   } catch (error) {
-    console.error(`Failed to delete ${getAdminFormat(desiredAdmin)} from Google Auth. ${error}`)
+    console.error(`Failed to delete ${getUserFormat(desiredAdmin)} from Google Auth. ${error}`)
     res.status(403).json({message: "Failed to delete admin."});
     return;
   }
 
   try {
     const writeResult = await UsersCollection.doc(desiredAdmin.id).delete();
-    console.log(`${getAdminFormat(req.user)} deleted ${getAdminFormat(desiredAdmin)}, from Users Collection in ${writeResult.writeTime.toDate().toString()}.`)
+    console.log(`${getUserFormat(req.user)} deleted ${getUserFormat(desiredAdmin)}, from Users Collection in ${writeResult.writeTime.toDate().toString()}.`)
   } catch (error) {
-    console.error(`Failed to delete ${getAdminFormat(desiredAdmin)} from Users Collection. ${error}`)
+    console.error(`Failed to delete ${getUserFormat(desiredAdmin)} from Users Collection. ${error}`)
   }
 
   res.status(200).json({message: "Deleted admin succesfully."})

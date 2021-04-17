@@ -12,7 +12,7 @@ function isMin(desiredUserType: string, currUserType: string | undefined): boole
 }
 
 function sendUnauthorized(res: express.Response, message: string = "Unauthorized") {
-  res.send(401).json({message});
+  res.status(401).json({message});
 }
 
 export const isEmployeeOrCompany =
