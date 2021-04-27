@@ -1,0 +1,28 @@
+{
+        "nombre_empresa": "texto_default",
+        "direccion_actual": "texto_default",
+        "municipio": "texto_default",
+        "estado": "texto_default",
+        "telefono_1": "texto_default",
+        "telefono_2": "texto_default",
+        "secciones": {
+                "posicion_vacante": {
+                        "jornada_de_trabajo": "texto_default",
+                        "funcion": "texto_default",
+                        "capacitacion_o_entrenamiento": "texto_default",
+                        "consultoria": "texto_default",
+                        "coaching": "texto_default"
+                },
+                "habilidades_necesarias": {
+                        "operacion_de_maquinaria": "texto_default",
+                        "conocimientos_tecnicos": "texto_default",
+                        "manejo_de_equipo_de_computo": "texto_default",
+                        "programacion_u_office": "texto_default",
+                        "analisis_logico": "texto_default",
+                        "analisis_numerico": "texto_default"
+                },
+                "competencias_requeridas": {
+                        "competencias": ["competencia0", "competencia1", "competencia2", "competencia3"]
+                }
+        }
+}

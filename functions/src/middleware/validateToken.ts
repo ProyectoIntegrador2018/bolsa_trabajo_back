@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as express from 'express';
 import { AuthRequest } from '../model/AuthRequest';
+import { getUserById } from '../helpers/utility';
 
 export const validateToken =
   async (req: AuthRequest, res: express.Response, next: express.NextFunction) => {
@@ -22,7 +23,8 @@ export const validateToken =
   try {
     const decodedToken: admin.auth.DecodedIdToken = await admin.auth().verifyIdToken(token);
     console.log('ID Token correctly decoded', decodedToken);
-    req.user = decodedToken;
+    req.token = decodedToken
+    req.user = await getUserById(decodedToken.uid);
     next();
     return;
   } catch (error) {
