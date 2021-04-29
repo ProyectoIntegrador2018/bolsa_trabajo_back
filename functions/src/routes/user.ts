@@ -4,8 +4,11 @@ import * as express from 'express';
 import * as admin from 'firebase-admin';
 import { UsersCollection } from "../helpers/collections";
 import { kUSER_STATES } from '../helpers/constants';
+import { AuthRequest } from '../model/AuthRequest';
+import { User } from '../model/User';
 
 export const userService = {
+  read,
   register,
 };
 
@@ -15,6 +18,15 @@ export const userService = {
     message: "Message indicating success."
   }
 */
+
+// Returns self.
+async function read(req: AuthRequest, res: any) {
+  if (req.user == undefined) throw "Undefined user.";
+  const userDoc = await UsersCollection.doc(req.user.id).get();
+  const user = {id: req.user.id, ...userDoc.data()} as User;
+  res.status(200).json(user);
+  return;
+}
 
 // AUTHORIZATION: UserSchema validates that only users of type
 //                'employee' and 'company' can be created.

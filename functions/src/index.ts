@@ -9,7 +9,7 @@ import * as cors from 'cors';
 import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
 import { adminSchema } from './middleware/schemas/adminSchema';
-import { isEmployeeOrCompany, isMinAdmin } from './middleware/userTypes';
+import { isMinAdmin, isMinEmployee } from './middleware/userTypePerms';
 import { userSchema } from './middleware/schemas/userSchema';
 import { userService } from './routes/user';
 import { formSchema } from './middleware/schemas/enrollmentFormSchema';
@@ -31,19 +31,20 @@ app.get('/auth-check', [validateToken], (_: any, res: any) => { res.send('Auth c
 // Create
 app.post('/api/admin', [validateToken, isMinAdmin, adminSchema.create], (req: any, res: any) => adminService.create(req, res));
 // Read
-app.get('/api/admin/', [validateToken, isMinAdmin, adminSchema.read], (req: any, res: any) => adminService.read(req, res));
+app.get('/api/admin', [validateToken, isMinAdmin, adminSchema.read], (req: any, res: any) => adminService.read(req, res));
 // Update: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
 app.put('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.update], (req: any, res: any) => adminService.update(req, res));
 // Delete: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
 app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (req: any, res: any) => adminService.deletee(req, res));
 
-// USERS CRUD?:
 // Create: Register for 'employee' and 'company' users.
-app.post('/api/user', [userSchema.register], (req: any, res: any) => userService.register(req, res));
+app.post('/api/user/register', [userSchema.register], (req: any, res: any) => userService.register(req, res));
+// Read: Get your user.
+app.get('/api/user', [validateToken, isMinEmployee], (req: any, res: any) => userService.read(req, res));
 
 
 // ENROLLMENT FORMS
-app.post('/api/user/enrollment-form', [validateToken, isEmployeeOrCompany, formSchema], (req: any, res: any) => enrollmentService.createFormat(req, res));
+app.post('/api/user/enrollment-form', [validateToken, formSchema], (req: any, res: any) => enrollmentService.createFormat(req, res));
 
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
