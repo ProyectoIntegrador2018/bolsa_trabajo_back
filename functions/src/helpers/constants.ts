@@ -10,6 +10,16 @@ export const kADMIN_TYPES = [
   kUSERS.superAdmin,
 ];
 
+export const kUSER_TYPES = [
+  kUSERS.employee,
+  kUSERS.company,
+];
+
+export const kALL_TYPES = [
+  ...kADMIN_TYPES,
+  ...kUSER_TYPES
+];
+
 export const kPERMISISON_NUMBER = new Map();
 kPERMISISON_NUMBER.set(kUSERS.employee, 0);
 kPERMISISON_NUMBER.set(kUSERS.company, 0);
