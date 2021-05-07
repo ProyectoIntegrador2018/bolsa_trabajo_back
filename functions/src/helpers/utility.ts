@@ -1,6 +1,6 @@
 import { User } from "../model/User";
 import { UsersCollection } from "./collections";
-import { kPERMISISON_NUMBER } from "./constants";
+import { kPERMISISON_NUMBER, kUSERS } from "./constants";
 
 // TODO: Move this function to utility
 export function ERROR_checkReqFields(required_fields: string[], data: any) {
@@ -43,6 +43,7 @@ export function getUserFormat(user: User) {
 }
 
 export async function getUserById(id: string): Promise<User> {
+  //TODO: Wrap this around try/catch block to not leak stack trace to front-end. 
   const user_doc = await UsersCollection.doc(id).get();
   if (!user_doc.exists) throw `User with id(${id} doesn't exist.)`;
   const user = {id, ...user_doc.data()} as User;
@@ -69,6 +70,11 @@ export function validateRequest(req: any, res: any, next: any, schema: any) {
     console.log(req.body)
     next();
   }
+}
+
+export async function isUserType(id: string, desiredType: kUSERS): Promise<boolean> {
+  const user = await getUserById(id);
+  return user.type == desiredType;
 }
 
 export function getWriteResultDate(writeResult: FirebaseFirestore.WriteResult): string {

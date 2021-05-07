@@ -9,11 +9,13 @@ import * as cors from 'cors';
 import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
 import { adminSchema } from './middleware/schemas/adminSchema';
-import { isMinAdmin, isMinEmployee } from './middleware/userTypePerms';
+import { isCompany, isEmployeeOrCompany, isMinAdmin, isMinEmployee } from './middleware/userTypePerms';
 import { userSchema } from './middleware/schemas/userSchema';
 import { userService } from './routes/user';
 import { formSchema } from './middleware/schemas/enrollmentFormSchema';
 import { enrollmentService } from './routes/enrollment';
+import { matchesService } from './routes/matches';
+import { matchesSchema } from './middleware/schemas/matchesSchema';
 
 //initialize express server
 const app = express();
@@ -37,14 +39,21 @@ app.put('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.update], (req:
 // Delete: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
 app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (req: any, res: any) => adminService.deletee(req, res));
 
+// ENROLLMENT FORMS
+app.post('/api/user/enrollment-form', [validateToken, formSchema], (req: any, res: any) => enrollmentService.createFormat(req, res));
+
+// MATCHES:
+app.post('/api/matches', [validateToken, isCompany, matchesSchema.create], (req: any, res: any) => matchesService.create(req, res));
+app.get('/api/matches', [validateToken, isEmployeeOrCompany, matchesSchema.read], (req: any, res: any) => matchesService.read(req, res));
+
+
 // Create: Register for 'employee' and 'company' users.
 app.post('/api/user/register', [userSchema.register], (req: any, res: any) => userService.register(req, res));
 // Read: Get your user.
 app.get('/api/user', [validateToken, isMinEmployee], (req: any, res: any) => userService.read(req, res));
 
 
-// ENROLLMENT FORMS
-app.post('/api/user/enrollment-form', [validateToken, formSchema], (req: any, res: any) => enrollmentService.createFormat(req, res));
+
 
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
