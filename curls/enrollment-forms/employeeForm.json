@@ -2,14 +2,15 @@
         "nombre": "texto_default",
         "fecha_de_nacimiento": "texto_default",
         "lugar_de_nacimiento": "texto_default",
-        "direccion_actual": "texto_default",
+        "calle": "texto_default",
+        "municipio": "texto_default",
+        "codigo_postal": "texto_default",
         "telefono_casa": "texto_default",
         "telefono_celular": "texto_default",
         "secciones": {
           
           "ultimo_ejemplo_o_actividad": {
-            "ultimo_anio": "texto_default",
-            "ultimos_tres_anios": "texto_default",
+            "ultimo_periodo": "texto_default",
             "empresa": "texto_default",
             "puesto": "texto_default",
             "responsabilidad": "texto_default"
@@ -24,21 +25,10 @@
           },
 
           "nivel_de_estudios": {
-            "primaria": {
-              "institucion": "texto_default", "fechas": "texto_default"
-            },
-            "secundaria": {
-              "institucion": "texto_default", "fechas": "texto_default"
-            },
-            "tecnica_o_bachillerato": {
-              "institucion": "texto_default", "fechas": "texto_default"
-            },
-            "profesional": {
-              "institucion": "texto_default", "fechas": "texto_default"
-            },
-            "maestria_o_doctorado": {
-              "institucion": "texto_default", "fechas": "texto_default"
-            }
+            "nivel_escolar": "texto_default",
+            "nombre_institucion": "texto_default",
+            "fecha_inicio": "texto_default",
+            "fecha_fin": "texto_default"
           },
 
           "comentarios": {
@@ -47,6 +37,14 @@
 
           "tus_habilidades_son": {
             "habilidades": ["habilidad0", "habilidad1", "habilidad2", "habilidad3", "habilidad4", "habilidad5"]
+          },
+
+          "clasificacion_puesto" : {
+            "clasificacion": "texto_default"
+          },
+
+          "aceptacion_politica" : {
+            "aceptacion" : false
           }
         }
 }

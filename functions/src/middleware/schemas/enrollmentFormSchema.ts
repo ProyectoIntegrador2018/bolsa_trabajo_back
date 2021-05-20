@@ -59,6 +59,14 @@ function getEmployeeSchema() {
           tus_habilidades_son: Joi.object({
             habilidades: Joi.array().items(Joi.string()).required(),
           }),
+
+          clasificacion_puesto: Joi.object ({
+            clasificacion: Joi.string().required(),
+          }),
+  
+          aceptacion_politica : Joi.object({
+            aceptacion : Joi.boolean().required(),
+          })
         })
         
     });
@@ -69,9 +77,9 @@ function getEmployeeSchema() {
 function getCompanySchema() {
     const schema = Joi.object({
         nombre_empresa: Joi.string().required(),
-        direccion_actual: Joi.string().required(),
+        calle: Joi.string().required(),
         municipio: Joi.string().required(),
-        estado: Joi.string().required(),
+        codigo_postal: Joi.string().required(),
         telefono_1: Joi.string().optional(),
         telefono_2: Joi.string().required(),
         secciones: Joi.object({

@@ -4,7 +4,9 @@ export interface EmployeeEnrollmentFormat extends EnrollmentMetadata {
   nombre: string,
   fecha_de_nacimiento: string,
   lugar_de_nacimiento: string,
-  direccion_actual: string,
+  calle: string,
+  municipio: string,
+  codigo_postal: string,
   telefono_casa?: string,
   telefono_celular: string,
   secciones: SeccionesEmployee, 
@@ -16,11 +18,12 @@ export interface SeccionesEmployee {
   nivel_de_estudios: NivelDeEstudios,
   comentarios: Comentarios,
   tus_habilidades_son: TusHabilidadesSon, 
+  clasificacion_puesto: ClasificacionPuesto,
+  aceptactionPolitica: AceptacionPolitica
 }
 
 export interface UltimoEmpleoOActividad {
-  ultimo_anio: string,
-  ultimos_tres_anios: string,
+  ultimo_periodo: string,
   empresa: string,
   puesto: string,
   responsabilidad: string,
@@ -37,16 +40,10 @@ export interface ActividadDeseada {
 }
 
 export interface NivelDeEstudios {
-  primaria: InstitucionFechasPar,
-  secundaria: InstitucionFechasPar,
-  tecnica_o_bachillerato: InstitucionFechasPar,
-  profesional: InstitucionFechasPar,
-  maestria_o_doctorado: InstitucionFechasPar, 
-}
-
-export interface InstitucionFechasPar {
-  institucion: string,
-  fechas: string,
+  nivel_escolar: string,
+  nombre_institucion: string,
+  fecha_inicio: string,
+  fecha_fin: string,
 }
 
 export interface Comentarios {
@@ -56,4 +53,12 @@ export interface Comentarios {
 // TODO: Define if it's going a default list of abilities or random user-defined abilities.
 export interface TusHabilidadesSon {
   habilidades: Set<string>,
+}
+
+export interface ClasificacionPuesto {
+  clasificacion: string,
+}
+
+export interface AceptacionPolitica {
+  aceptacion: boolean,
 }
