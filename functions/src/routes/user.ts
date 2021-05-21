@@ -34,8 +34,8 @@ async function filter(req: AuthRequest, res: any) {
   const {field, operator, target} = req.body;
   const formDocs = await EnrollmentFormsCollection.where(`enrollmentForm.${field}`, operator, target).get();
   let employeeIds: Array<string> = [];
-  formDocs.forEach(fD => {
-    const data = {...fD.data()} as EmployeeEnrollmentFormat;
+  formDocs.forEach(formDoc => {
+    const data = {id: formDoc.id, ...formDoc.data()} as EmployeeEnrollmentFormat;
     employeeIds.push(data.userId);
   });
   if (employeeIds.length == 0) {

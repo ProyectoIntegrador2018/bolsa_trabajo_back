@@ -12,9 +12,19 @@ const actividadDeseadaSchema = {
 };
 const posicionVacanteSchema = actividadDeseadaSchema;
 
-export function formSchema(req: AuthRequest, res: any, next: any) {
+export const formSchema = {
+  bothForms,
+  read,
+};
+
+function bothForms(req: AuthRequest, res: any, next: any) {
   const schema = req.user?.type == kUSERS.employee ? getEmployeeSchema() : getCompanySchema();
   validateRequest(req, res, next, schema);
+}
+
+export function read(req: any, res: any, next: any) {
+    const schema = Joi.object({});
+    validateRequest(req, res, next, schema);
 }
 
 // TODO: Validate fields way more strictly, add regexes, etc.

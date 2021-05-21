@@ -40,7 +40,8 @@ app.put('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.update], (req:
 app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (req: any, res: any) => adminService.deletee(req, res));
 
 // ENROLLMENT FORMS
-app.post('/api/user/enrollment-form', [validateToken, formSchema], (req: any, res: any) => enrollmentService.createFormat(req, res));
+app.get('/api/user/enrollment-form/:id', [validateToken, formSchema.read], (req: any, res: any) => enrollmentService.readForm(req, res));
+app.post('/api/user/enrollment-form', [validateToken, formSchema.bothForms], (req: any, res: any) => enrollmentService.createForm(req, res));
 
 // MATCHES:
 app.post('/api/matches', [validateToken, isCompany, matchesSchema.create], (req: any, res: any) => matchesService.create(req, res));

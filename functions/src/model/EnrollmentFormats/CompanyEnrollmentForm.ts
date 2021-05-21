@@ -2,6 +2,7 @@ import { ActividadDeseada } from "./EmployeeEnrollmentForm";
 import { EnrollmentMetadata } from "./EnrollmentMetadata";
 
 export interface CompanyEnrollmentFormat extends EnrollmentMetadata {
+  id: string,
   nombre_empresa: string,
   calle: string,
   municipio: string,
