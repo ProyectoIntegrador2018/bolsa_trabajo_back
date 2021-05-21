@@ -6,9 +6,9 @@ import { AuthRequest } from "../../model/AuthRequest";
 const actividadDeseadaSchema = {
   jornada_de_trabajo: Joi.string().required(),
   funcion: Joi.string().required(),
-  capacitacion_o_entrenamiento: Joi.string().required(),
-  consultoria: Joi.string().required(),
-  coaching: Joi.string().required(),
+  capacitacion_o_entrenamiento: Joi.string().optional(),
+  consultoria: Joi.string().optional(),
+  coaching: Joi.string().optional(),
 };
 const posicionVacanteSchema = actividadDeseadaSchema;
 
@@ -19,25 +19,22 @@ export function formSchema(req: AuthRequest, res: any, next: any) {
 
 // TODO: Validate fields way more strictly, add regexes, etc.
 function getEmployeeSchema() {
-    const institFechasParSchema = Joi.object({
-      institucion: Joi.string().required(),
-      fechas: Joi.string().required(),
-    });
     const schema = Joi.object({
         nombre: Joi.string().required(),
         fecha_de_nacimiento: Joi.string().required(),
-        lugar_de_nacimiento: Joi.string().required(),
-        direccion_actual: Joi.string().required(),
+        lugar_de_nacimiento: Joi.string().optional(),
+        calle: Joi.string().optional(),
+        municipio: Joi.string().required(),
+        codigo_postal: Joi.string().optional(),
         telefono_casa: Joi.string().optional(),
-        telefono_celular: Joi.string().required(),
+        telefono_celular: Joi.string().optional(),
         secciones: Joi.object({
           
           ultimo_ejemplo_o_actividad: Joi.object({
-            ultimo_anio: Joi.string().required(),
-            ultimos_tres_anios: Joi.string().required(),
+            ultimo_periodo: Joi.string().required(),
             empresa: Joi.string().required(),
             puesto: Joi.string().required(),
-            responsabilidad: Joi.string().required(),
+            responsabilidad: Joi.string().optional(),
           }),
 
           actividad_deseada: Joi.object(
@@ -45,11 +42,10 @@ function getEmployeeSchema() {
           ),
 
           nivel_de_estudios: Joi.object({
-            primaria: institFechasParSchema,
-            secundaria: institFechasParSchema,
-            tecnica_o_bachillerato: institFechasParSchema,
-            profesional: institFechasParSchema,
-            maestria_o_doctorado: institFechasParSchema,
+            nivel_escolar: Joi.string().required(),
+            nombre_institucion: Joi.string().required(),
+            fecha_inicio: Joi.string().required(),
+            fecha_fin: Joi.string().required()
           }),
 
           comentarios: Joi.object({
@@ -57,8 +53,16 @@ function getEmployeeSchema() {
           }),
 
           tus_habilidades_son: Joi.object({
-            habilidades: Joi.array().items(Joi.string()).required(),
+            habilidades: Joi.array().items(Joi.string()).optional(),
           }),
+
+          clasificacion_puesto: Joi.object ({
+            clasificacion: Joi.string().required(),
+          }),
+  
+          aceptacion_politica : Joi.object({
+            aceptacion : Joi.boolean().required(),
+          })
         })
         
     });
@@ -69,9 +73,9 @@ function getEmployeeSchema() {
 function getCompanySchema() {
     const schema = Joi.object({
         nombre_empresa: Joi.string().required(),
-        direccion_actual: Joi.string().required(),
+        calle: Joi.string().required(),
         municipio: Joi.string().required(),
-        estado: Joi.string().required(),
+        codigo_postal: Joi.string().required(),
         telefono_1: Joi.string().optional(),
         telefono_2: Joi.string().required(),
         secciones: Joi.object({

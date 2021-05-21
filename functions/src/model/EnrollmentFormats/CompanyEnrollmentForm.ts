@@ -3,9 +3,9 @@ import { EnrollmentMetadata } from "./EnrollmentMetadata";
 
 export interface CompanyEnrollmentFormat extends EnrollmentMetadata {
   nombre_empresa: string,
-  direccion_actual: string,
+  calle: string,
   municipio: string,
-  estado: string,
+  codigo_postal: string,
   telefono_1: string,
   telefono_2: string,
 }

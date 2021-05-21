@@ -1,7 +1,9 @@
 # service accoutns
 bolsa-de-trabajo-back-prod.json
+.env
 #logs
 functions/firebase-debug.log
+.DS_Store
 
 # dependencies
 node_modules

@@ -1,8 +1,8 @@
 {
         "nombre_empresa": "texto_default",
-        "direccion_actual": "texto_default",
+        "calle": "texto_default",
         "municipio": "texto_default",
-        "estado": "texto_default",
+        "codigo_postal": "texto_default",
         "telefono_1": "texto_default",
         "telefono_2": "texto_default",
         "secciones": {
