@@ -53,7 +53,7 @@ function getEmployeeSchema() {
           }),
 
           tus_habilidades_son: Joi.object({
-            habilidades: Joi.array().items(Joi.string()).required(),
+            habilidades: Joi.array().items(Joi.string()).optional(),
           }),
 
           clasificacion_puesto: Joi.object ({
