@@ -1,6 +1,7 @@
 import { EnrollmentMetadata } from "./EnrollmentMetadata";
 
 export interface EmployeeEnrollmentFormat extends EnrollmentMetadata {
+  userId: string,
   nombre: string,
   fecha_de_nacimiento: string,
   lugar_de_nacimiento: string,

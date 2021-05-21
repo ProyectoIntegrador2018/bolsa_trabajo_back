@@ -9,7 +9,7 @@ import * as cors from 'cors';
 import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
 import { adminSchema } from './middleware/schemas/adminSchema';
-import { isCompany, isEmployeeOrCompany, isMinAdmin, isMinEmployee } from './middleware/userTypePerms';
+import { isCompany, isCompanyOrAnyAdmin, isEmployeeOrCompany, isMinAdmin, isMinEmployee } from './middleware/userTypePerms';
 import { userSchema } from './middleware/schemas/userSchema';
 import { userService } from './routes/user';
 import { formSchema } from './middleware/schemas/enrollmentFormSchema';
@@ -50,7 +50,11 @@ app.get('/api/matches', [validateToken, isEmployeeOrCompany, matchesSchema.read]
 // Create: Register for 'employee' and 'company' users.
 app.post('/api/user/register', [userSchema.register], (req: any, res: any) => userService.register(req, res));
 // Read: Get your user.
-app.get('/api/user', [validateToken, isMinEmployee], (req: any, res: any) => userService.read(req, res));
+app.get('/api/user', [validateToken, isMinEmployee, userSchema.read], (req: any, res: any) => userService.read(req, res));
+
+// Filter: users
+app.get('/api/user/filter', [validateToken, isCompanyOrAnyAdmin, userSchema.filter], (req: any, res: any) => userService.filter(req, res));
+
 
 
 
