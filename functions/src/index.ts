@@ -62,7 +62,7 @@ app.post('/api/user/register', [userSchema.register], (req: any, res: any) => us
 app.get('/api/user', [validateToken, isMinEmployee, userSchema.read], (req: any, res: any) => userService.read(req, res));
 
 // Filter: users
-app.get('/api/user/filter', [validateToken, isCompanyOrAnyAdmin, userSchema.filter], (req: any, res: any) => userService.filter(req, res));
+app.post('/api/user/filter', [validateToken, isCompanyOrAnyAdmin, userSchema.filter], (req: any, res: any) => userService.filter(req, res));
 
 
 

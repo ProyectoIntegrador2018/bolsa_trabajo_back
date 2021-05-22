@@ -14,9 +14,10 @@ export function filter(req: any, res: any, next: any) {
         field: Joi.string()
             .valid(...[
                 "municipio",
-                "secciones.actividad_deseada.jornada_de_trabajo", 
+                "secciones.actividad_deseada.jornada_de_trabajo",
                 "secciones.ultimo_ejemplo_o_actividad.puesto",
-                "secciones.nivel_de_estudios.nivel_escolar"])
+                "secciones.nivel_de_estudios.nivel_escolar",
+                "secciones.clasificacion_puesto.clasificacion"])
             .required(),
         operator: Joi.string()
             .valid(...["<", ">", "<=", ">=", "=="])
