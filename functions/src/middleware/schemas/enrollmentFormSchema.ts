@@ -3,14 +3,13 @@ import { kUSERS } from "../../helpers/constants";
 import { validateRequest } from "../../helpers/utility";
 import { AuthRequest } from "../../model/AuthRequest";
 
-const actividadDeseadaSchema = {
+export const actividadDeseadaSchema = {
   jornada_de_trabajo: Joi.string().required(),
   funcion: Joi.string().required(),
   capacitacion_o_entrenamiento: Joi.string().optional(),
   consultoria: Joi.string().optional(),
   coaching: Joi.string().optional(),
 };
-const posicionVacanteSchema = actividadDeseadaSchema;
 
 export const formSchema = {
   bothForms,
@@ -88,26 +87,6 @@ function getCompanySchema() {
         codigo_postal: Joi.string().required(),
         telefono_1: Joi.string().optional(),
         telefono_2: Joi.string().required(),
-        secciones: Joi.object({
-          
-          posicion_vacante: Joi.object(
-            posicionVacanteSchema
-          ),
-
-          habilidades_necesarias: Joi.object({
-            operacion_de_maquinaria: Joi.string().required(),
-            conocimientos_tecnicos: Joi.string().required(),
-            manejo_de_equipo_de_computo: Joi.string().required(),
-            programacion_u_office: Joi.string().required(),
-            analisis_logico: Joi.string().required(),
-            analisis_numerico: Joi.string().required(),
-          }),
-
-          competencias_requeridas: Joi.object({
-            competencias: Joi.array().items(Joi.string()).required(),
-          }),
-        })
-        
     });
     return schema;
 }

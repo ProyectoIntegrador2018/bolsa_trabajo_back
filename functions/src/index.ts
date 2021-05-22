@@ -16,6 +16,8 @@ import { formSchema } from './middleware/schemas/enrollmentFormSchema';
 import { enrollmentService } from './routes/enrollment';
 import { matchesService } from './routes/matches';
 import { matchesSchema } from './middleware/schemas/matchesSchema';
+import { jobSchema } from './middleware/schemas/jobSchema';
+import { jobService } from './routes/job';
 
 //initialize express server
 const app = express();
@@ -39,7 +41,11 @@ app.put('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.update], (req:
 // Delete: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
 app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (req: any, res: any) => adminService.deletee(req, res));
 
-// ENROLLMENT FORMS
+// JOBS(kinda) CRUD:
+// Create
+app.post('/api/job', [validateToken, isCompany, jobSchema.create], (req: any, res: any) => jobService.create(req, res));
+
+// ENROLLMENT FORMS:
 app.get('/api/user/enrollment-form/:id', [validateToken, formSchema.read], (req: any, res: any) => enrollmentService.readForm(req, res));
 app.post('/api/user/enrollment-form', [validateToken, formSchema.bothForms], (req: any, res: any) => enrollmentService.createForm(req, res));
 
@@ -48,6 +54,7 @@ app.post('/api/matches', [validateToken, isCompany, matchesSchema.create], (req:
 app.get('/api/matches', [validateToken, isEmployeeOrCompany, matchesSchema.read], (req: any, res: any) => matchesService.read(req, res));
 
 
+// USERS:
 // Create: Register for 'employee' and 'company' users.
 app.post('/api/user/register', [userSchema.register], (req: any, res: any) => userService.register(req, res));
 // Read: Get your user.
