@@ -24,6 +24,7 @@ async function create(req: AuthRequest, res: express.Response) {
   const jobMetadata = { createdAt: getCurrSeconds() }
   const createdBy = req.user?.id;
   const data = req.body;
+  data.createdBy = createdBy;
   const job = {jobMetadata: jobMetadata, job: data};
   try {
     const jobRef = await JobsCollection.add(job);

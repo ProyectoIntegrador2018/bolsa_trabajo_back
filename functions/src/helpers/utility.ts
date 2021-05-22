@@ -1,5 +1,7 @@
+import { Job } from "../model/Job/Job";
+import { Match } from "../model/Match";
 import { User } from "../model/User";
-import { UsersCollection } from "./collections";
+import { JobsCollection, MatchesCollection, UsersCollection } from "./collections";
 import { kPERMISISON_NUMBER, kUSERS } from "./constants";
 
 // TODO: Move this function to utility
@@ -50,6 +52,22 @@ export async function getUserById(id: string): Promise<User> {
   return user;
 }
 
+export async function getJobById(id: string): Promise<Job> {
+  //TODO: Wrap this around try/catch block to not leak stack trace to front-end. 
+  const job_doc = await JobsCollection.doc(id).get();
+  if (!job_doc.exists) throw `Job with id(${id} doesn't exist.)`;
+  const job = {id, ...job_doc.data()} as Job;
+  return job;
+}
+
+export async function getMatchById(id: string): Promise<Match> {
+  //TODO: Wrap this around try/catch block to not leak stack trace to front-end. 
+  const match_doc = await MatchesCollection.doc(id).get();
+  if (!match_doc.exists) throw `Match with id(${id} doesn't exist.)`;
+  const match = {id, ...match_doc.data()} as Match;
+  return match;
+}
+
 export function validateRequest(req: any, res: any, next: any, schema: any) {
   console.log("Entrant request:");
   console.log(req.body);
@@ -75,6 +93,16 @@ export function validateRequest(req: any, res: any, next: any, schema: any) {
 export async function isUserType(id: string, desiredType: kUSERS): Promise<boolean> {
   const user = await getUserById(id);
   return user.type == desiredType;
+}
+
+export async function jobBelongsTo(userId: string, jobId: string): Promise<boolean> {
+  const job = await getJobById(jobId);
+  return userId == job.createdBy;
+}
+
+export async function matchBelongsTo(userId: string, matchId: string): Promise<boolean> {
+  const match = await getMatchById(matchId);
+  return userId == match.company.id;
 }
 
 export function getWriteResultDate(writeResult: FirebaseFirestore.WriteResult): string {

@@ -14,8 +14,8 @@ import { userSchema } from './middleware/schemas/userSchema';
 import { userService } from './routes/user';
 import { formSchema } from './middleware/schemas/enrollmentFormSchema';
 import { enrollmentService } from './routes/enrollment';
-import { matchesService } from './routes/matches';
-import { matchesSchema } from './middleware/schemas/matchesSchema';
+import { matchService } from './routes/match';
+import { matchSchema } from './middleware/schemas/matchSchema';
 import { jobSchema } from './middleware/schemas/jobSchema';
 import { jobService } from './routes/job';
 
@@ -50,8 +50,9 @@ app.get('/api/user/enrollment-form/:id', [validateToken, formSchema.read], (req:
 app.post('/api/user/enrollment-form', [validateToken, formSchema.bothForms], (req: any, res: any) => enrollmentService.createForm(req, res));
 
 // MATCHES:
-app.post('/api/matches', [validateToken, isCompany, matchesSchema.create], (req: any, res: any) => matchesService.create(req, res));
-app.get('/api/matches', [validateToken, isEmployeeOrCompany, matchesSchema.read], (req: any, res: any) => matchesService.read(req, res));
+app.post('/api/match', [validateToken, isCompany, matchSchema.create], (req: any, res: any) => matchService.create(req, res));
+app.get('/api/match', [validateToken, isEmployeeOrCompany, matchSchema.read], (req: any, res: any) => matchService.read(req, res));
+app.put('/api/match/:id', [validateToken, isCompany, matchSchema.update], (req: any, res: any) => matchService.update(req, res));
 
 
 // USERS:
