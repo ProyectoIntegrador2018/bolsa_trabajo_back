@@ -73,7 +73,7 @@ async function create(req: AuthRequest, res: any) {
 //       hide employeeIds when companies request it.
 async function read(req: AuthRequest, res: express.Response) {
   if (req.user == undefined) throw "Undefined user.";
-  const idType = req.user.type == kUSERS.employee ? "employeeId" : "companyId";
+  const idType = req.user.type == kUSERS.employee ? "employee.id" : "company.id";
   // TODO: Should we wrap this in try and catch or does it just return empty if something fails??
   const snapshot = await MatchesCollection.where(idType, "==", req.user.id).get();
   const matches: Array<Match> = [];
