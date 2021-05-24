@@ -25,7 +25,9 @@ async function create(req: AuthRequest, res: express.Response) {
   const createdBy = req.user?.id;
   const data = req.body;
   data.createdBy = createdBy;
-  const job = {jobMetadata: jobMetadata, job: data};
+  const job = data;
+  job.jobMetadata = jobMetadata;
+  //const job = {jobMetadata: jobMetadata, data};
   try {
     const jobRef = await JobsCollection.add(job);
     const jobDoc = await jobRef.get();

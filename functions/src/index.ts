@@ -52,7 +52,7 @@ app.post('/api/user/enrollment-form', [validateToken, formSchema.bothForms], (re
 // MATCHES:
 app.post('/api/match', [validateToken, isCompany, matchSchema.create], (req: any, res: any) => matchService.create(req, res));
 app.get('/api/match', [validateToken, isEmployeeOrCompany, matchSchema.read], (req: any, res: any) => matchService.read(req, res));
-app.put('/api/match/:id', [validateToken, isCompany, matchSchema.update], (req: any, res: any) => matchService.update(req, res));
+app.put('/api/match/:id', [validateToken, isEmployeeOrCompany, matchSchema.update], (req: any, res: any) => matchService.update(req, res));
 
 
 // USERS:
