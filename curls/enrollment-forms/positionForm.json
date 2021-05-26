@@ -1,0 +1,24 @@
+{    
+    "nombre_puesto": "texto_default",
+    "secciones": {
+            "posicion_vacante": {
+                    "jornada_de_trabajo": "texto_default",
+                    "funcion": "texto_default",
+                    "capacitacion_o_entrenamiento": "texto_default",
+                    "consultoria": "texto_default",
+                    "coaching": "texto_default"
+            },
+            "habilidades_necesarias": {
+                    "operacion_de_maquinaria": "texto_default",
+                    "conocimientos_tecnicos": "texto_default",
+                    "manejo_de_equipo_de_computo": "texto_default",
+                    "programacion_u_office": "texto_default",
+                    "analisis_logico": "texto_default",
+                    "analisis_numerico": "texto_default",
+                    "titulo_profesional": "texto_default"
+            },
+            "competencias_requeridas": {
+                    "competencias": ["comptencia0", "comptencia1", "comptencia2", "comptencia3", "comptencia4", "comptencia5"]
+            }
+    }
+}

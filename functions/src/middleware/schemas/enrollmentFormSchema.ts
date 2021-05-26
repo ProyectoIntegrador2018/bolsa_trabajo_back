@@ -78,26 +78,34 @@ function getCompanySchema() {
         codigo_postal: Joi.string().required(),
         telefono_1: Joi.string().optional(),
         telefono_2: Joi.string().required(),
-        secciones: Joi.object({
-          
-          posicion_vacante: Joi.object(
-            posicionVacanteSchema
-          ),
-
-          habilidades_necesarias: Joi.object({
-            operacion_de_maquinaria: Joi.string().required(),
-            conocimientos_tecnicos: Joi.string().required(),
-            manejo_de_equipo_de_computo: Joi.string().required(),
-            programacion_u_office: Joi.string().required(),
-            analisis_logico: Joi.string().required(),
-            analisis_numerico: Joi.string().required(),
-          }),
-
-          competencias_requeridas: Joi.object({
-            competencias: Joi.array().items(Joi.string()).required(),
-          }),
-        })
+        
         
     });
     return schema;
+}
+
+function getPositionSchema() {
+  const schema = Joi.object({
+    nombre_puesto: Joi.string().required(),
+    secciones: Joi.object({
+      posicion_vacante: Joi.object(
+        posicionVacanteSchema
+      ),
+  
+      habilidades_necesarias: Joi.object({
+        operacion_de_maquinaria: Joi.string().optional(),
+        conocimientos_tecnicos: Joi.string().optional(),
+        manejo_de_equipo_de_computo: Joi.string().optional(),
+        programacion_u_office: Joi.string().optional(),
+        analisis_logico: Joi.string().optional(),
+        analisis_numerico: Joi.string().optional(),
+        titulo_profesional: Joi.string().optional()
+      }),
+  
+      competencias_requeridas: Joi.object({
+        competencias: Joi.array().items(Joi.string()).required(),
+      }),
+    })
+  })
+  return schema
 }
