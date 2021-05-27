@@ -17,6 +17,7 @@ export interface HabilidadesNecesarias {
   programacion_u_office: string,
   analisis_logico: string,
   analisis_numerico: string,
+  titulo_profesional: string
 }
 
 export interface CompetenciasRequeridas {

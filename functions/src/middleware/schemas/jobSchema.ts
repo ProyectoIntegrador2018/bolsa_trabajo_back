@@ -21,6 +21,7 @@ export function create(req: any, res: any, next: any) {
           programacion_u_office: Joi.string().optional(),
           analisis_logico: Joi.string().optional(),
           analisis_numerico: Joi.string().optional(),
+          titulo_profesional: Joi.string().optional()
         }),
         competencias_requeridas: Joi.object({
           competencias: Joi.array().items(Joi.string()).optional(),
