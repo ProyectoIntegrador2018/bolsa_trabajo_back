@@ -6,6 +6,7 @@ const posicionVacanteSchema = actividadDeseadaSchema;
 
 export const jobSchema = {
   create,
+  read
 };
 
 export function create(req: any, res: any, next: any) {
@@ -27,5 +28,10 @@ export function create(req: any, res: any, next: any) {
           competencias: Joi.array().items(Joi.string()).optional(),
         }),
     });
+    validateRequest(req, res, next, schema);
+}
+
+export function read(req: any, res: any, next: any) {
+    const schema = Joi.object({});
     validateRequest(req, res, next, schema);
 }
