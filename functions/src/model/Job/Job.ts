@@ -4,6 +4,7 @@ import { JobMetadata } from "./JobMetadata";
 export interface Job extends JobMetadata {
   id: string,
   createdBy: string, // This is a userId of type company
+  nombre_puesto: string,
   posicion_vacante: ActividadDeseada, // Activdad Deseada from EmployeeEnrollmentForm is equivalent to PosicionVacante
   habilidades_necesarias: HabilidadesNecesarias,
   competencias_requeridas: CompetenciasRequeridas,

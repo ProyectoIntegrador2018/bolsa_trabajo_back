@@ -85,8 +85,11 @@ function getCompanySchema() {
         calle: Joi.string().required(),
         municipio: Joi.string().required(),
         codigo_postal: Joi.string().required(),
-        telefono_1: Joi.string().optional(),
+        telefono_1: Joi.string().required(),
         telefono_2: Joi.string().required(),
+        aceptacion_politica : Joi.object({
+          aceptacion : Joi.boolean().required(),
+        })
     });
     return schema;
 }

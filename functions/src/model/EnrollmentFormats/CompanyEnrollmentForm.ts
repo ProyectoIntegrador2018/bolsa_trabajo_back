@@ -8,4 +8,9 @@ export interface CompanyEnrollmentFormat extends EnrollmentMetadata {
   codigo_postal: string,
   telefono_1: string,
   telefono_2: string,
+  aceptacion_politica: AceptacionPolitica
+}
+
+export interface AceptacionPolitica {
+  aceptacion: boolean,
 }
