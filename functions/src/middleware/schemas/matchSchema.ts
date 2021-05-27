@@ -24,7 +24,7 @@ export function read(req: any, res: any, next: any) {
 
 export function update(req: any, res: any, next: any) {
     const schema = Joi.object({
-        jobId: Joi.string().required(),
+        //jobId: Joi.string().required(),
         state: Joi.string().valid(...getMatchStates()).required(),
     });
     validateRequest(req, res, next, schema);

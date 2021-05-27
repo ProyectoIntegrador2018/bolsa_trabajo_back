@@ -91,13 +91,13 @@ async function update(req: AuthRequest, res: any) {
   const data = req.body;
   // Maybe move this check to a middleware??? idk..
   // TODO: Add isValidJob to try and catch block.
-  const isValidJob = await jobBelongsTo(req.user.id, data.jobId);
+  //const isValidJob = await jobBelongsTo(req.user.id, data.jobId);
   const isValidMatch = await matchBelongsTo(req.user.id, matchId);
-  if (!isValidJob) {
+  /*if (!isValidJob) {
     console.error(`${data.jobId} is not a valid job.`);
     res.status(403).json({message: "Puesto invalido."});
     return;
-  }
+  }*/
   if (!isValidMatch) {
     console.error(`${matchId} is not a valid match.`);
     res.status(403).json({message: "Match invalido."});
