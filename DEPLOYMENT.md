@@ -10,7 +10,7 @@
 
 `npm install`
 
-6. Realiza lo mismo en la carpeta del back
+6. Realiza lo mismo en la carpeta del back-end dentro del folder *functions*
 7. Por ultimo corre este ultimo comando para instalar las herramientas necesarias de bases de datos
 
 `npm install -g firebase-tools`
@@ -22,7 +22,7 @@
 `npm run build && firebase emulators:start``
 4. Para verificar que tu instalación fue correcta, en tu navegador ingresa a esta dirección: http://localhost:5001/bolsa-de-trabajo-back/us-central1/app y si todo esta corriendo como debe, el navegador dira "Alohawaii". Si no, revisa los pasos previos si algo te falto
 5. Una vez instalado esto, navega al directorio del front e ingresa este comando
-`npm start`
+`npm run start`
 
 En tu navegador se abrira una direción: http://localhost:3000.
 

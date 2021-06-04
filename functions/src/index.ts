@@ -9,11 +9,15 @@ import * as cors from 'cors';
 import { validateToken } from './middleware/validateToken';
 import { adminService } from './routes/admin';
 import { adminSchema } from './middleware/schemas/adminSchema';
-import { isMinAdmin, isMinEmployee } from './middleware/userTypePerms';
+import { isCompany, isCompanyOrAnyAdmin, isEmployeeOrCompany, isMinAdmin, isMinEmployee } from './middleware/userTypePerms';
 import { userSchema } from './middleware/schemas/userSchema';
 import { userService } from './routes/user';
 import { formSchema } from './middleware/schemas/enrollmentFormSchema';
 import { enrollmentService } from './routes/enrollment';
+import { matchService } from './routes/match';
+import { matchSchema } from './middleware/schemas/matchSchema';
+import { jobSchema } from './middleware/schemas/jobSchema';
+import { jobService } from './routes/job';
 
 //initialize express server
 const app = express();
@@ -37,14 +41,33 @@ app.put('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.update], (req:
 // Delete: IMPORTANT: Send id but it will be ignored. ID will be grabbed from JWT (User can only updated (him|her)self)
 app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (req: any, res: any) => adminService.deletee(req, res));
 
+// JOBS(kinda) CRUD:
+// Create
+app.post('/api/job', [validateToken, isCompany, jobSchema.create], (req: any, res: any) => jobService.create(req, res));
+app.get('/api/job', [validateToken, isCompany, jobSchema.read], (req: any, res: any) => jobService.read(req, res));
+
+// ENROLLMENT FORMS:
+app.get('/api/user/enrollment-form/:id', [validateToken, formSchema.read], (req: any, res: any) => enrollmentService.readForm(req, res));
+app.post('/api/user/enrollment-form', [validateToken, formSchema.bothForms], (req: any, res: any) => enrollmentService.createForm(req, res));
+
+// MATCHES:
+app.post('/api/match', [validateToken, isCompany, matchSchema.create], (req: any, res: any) => matchService.create(req, res));
+app.get('/api/match', [validateToken, isEmployeeOrCompany, matchSchema.read], (req: any, res: any) => matchService.read(req, res));
+app.put('/api/match/:id', [validateToken, isEmployeeOrCompany, matchSchema.update], (req: any, res: any) => matchService.update(req, res));
+
+
+// USERS:
 // Create: Register for 'employee' and 'company' users.
 app.post('/api/user/register', [userSchema.register], (req: any, res: any) => userService.register(req, res));
 // Read: Get your user.
-app.get('/api/user', [validateToken, isMinEmployee], (req: any, res: any) => userService.read(req, res));
+app.get('/api/user', [validateToken, isMinEmployee, userSchema.read], (req: any, res: any) => userService.read(req, res));
+
+// Filter: users
+app.post('/api/user/filter', [validateToken, isCompanyOrAnyAdmin, userSchema.filter], (req: any, res: any) => userService.filter(req, res));
 
 
-// ENROLLMENT FORMS
-app.post('/api/user/enrollment-form', [validateToken, formSchema], (req: any, res: any) => enrollmentService.createFormat(req, res));
+
+
 
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.

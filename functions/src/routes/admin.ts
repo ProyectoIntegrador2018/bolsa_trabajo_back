@@ -31,7 +31,6 @@ async function create(req: AuthRequest, res: express.Response) {
     return;
   }
   
-  // TODO: Create middleware that validates required fields.
   // Receive this in req sent by the middleware, use this for auditing.
   const createdBy = req.user?.id;
   

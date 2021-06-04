@@ -3,18 +3,27 @@ import { kUSERS } from "../../helpers/constants";
 import { validateRequest } from "../../helpers/utility";
 import { AuthRequest } from "../../model/AuthRequest";
 
-const actividadDeseadaSchema = {
+export const actividadDeseadaSchema = {
   jornada_de_trabajo: Joi.string().required(),
   funcion: Joi.string().required(),
   capacitacion_o_entrenamiento: Joi.string().optional(),
   consultoria: Joi.string().optional(),
   coaching: Joi.string().optional(),
 };
-const posicionVacanteSchema = actividadDeseadaSchema;
 
-export function formSchema(req: AuthRequest, res: any, next: any) {
+export const formSchema = {
+  bothForms,
+  read,
+};
+
+function bothForms(req: AuthRequest, res: any, next: any) {
   const schema = req.user?.type == kUSERS.employee ? getEmployeeSchema() : getCompanySchema();
   validateRequest(req, res, next, schema);
+}
+
+export function read(req: any, res: any, next: any) {
+    const schema = Joi.object({});
+    validateRequest(req, res, next, schema);
 }
 
 // TODO: Validate fields way more strictly, add regexes, etc.
@@ -76,28 +85,11 @@ function getCompanySchema() {
         calle: Joi.string().required(),
         municipio: Joi.string().required(),
         codigo_postal: Joi.string().required(),
-        telefono_1: Joi.string().optional(),
+        telefono_1: Joi.string().required(),
         telefono_2: Joi.string().required(),
-        secciones: Joi.object({
-          
-          posicion_vacante: Joi.object(
-            posicionVacanteSchema
-          ),
-
-          habilidades_necesarias: Joi.object({
-            operacion_de_maquinaria: Joi.string().required(),
-            conocimientos_tecnicos: Joi.string().required(),
-            manejo_de_equipo_de_computo: Joi.string().required(),
-            programacion_u_office: Joi.string().required(),
-            analisis_logico: Joi.string().required(),
-            analisis_numerico: Joi.string().required(),
-          }),
-
-          competencias_requeridas: Joi.object({
-            competencias: Joi.array().items(Joi.string()).required(),
-          }),
+        aceptacion_politica : Joi.object({
+          aceptacion : Joi.boolean().required(),
         })
-        
     });
     return schema;
 }

@@ -23,6 +23,9 @@
                 },
                 "competencias_requeridas": {
                         "competencias": ["competencia0", "competencia1", "competencia2", "competencia3"]
-                }
+                },
+                "aceptacion_politica" : {
+                        "aceptacion" : false
+                      }
         }
 }

@@ -20,7 +20,21 @@ export const isEmployeeOrCompany =
     if (req.user?.type == kUSERS.employee || req.user?.type == kUSERS.company) next();
     else sendUnauthorized(res);
     return;
-  }
+};
+
+export const isCompanyOrAnyAdmin =
+  async (req: AuthRequest, res: express.Response, next: express.NextFunction) => {
+    if (req.user?.type == kUSERS.company || req.user?.type == kUSERS.admin || req.user?.type == kUSERS.superAdmin) next();
+    else sendUnauthorized(res);
+    return;
+};
+
+export const isCompany =
+  async (req: AuthRequest, res: express.Response, next: express.NextFunction) => {
+    if (req.user?.type == kUSERS.company) next();
+    else sendUnauthorized(res);
+    return;
+};
 
 export const isEmployee =
   async (req: AuthRequest, res: express.Response, next: express.NextFunction) => {

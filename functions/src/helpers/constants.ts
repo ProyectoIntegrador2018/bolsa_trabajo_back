@@ -30,3 +30,20 @@ export const kUSER_STATES = {
   active: "active",
   inactive: "inactive",
 };
+
+export enum kMATCH_STATES {
+  pending = "pending",
+  declined = "declined",
+  active = "active",
+  notHired = "notHired",
+  hired = "hired",
+};
+export function getMatchStates(): Array<kMATCH_STATES> {
+  return [
+    kMATCH_STATES.pending,
+    kMATCH_STATES.declined,
+    kMATCH_STATES.active,
+    kMATCH_STATES.notHired,
+    kMATCH_STATES.hired,
+  ];
+}
