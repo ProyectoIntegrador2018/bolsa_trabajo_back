@@ -6,7 +6,8 @@ import { Job } from "../model/Job/Job";
 
 export const jobService = {
   create,
-  read
+  read,
+  findOne
   // read,
   // update,
   // deletee,
@@ -53,5 +54,15 @@ async function read(req: AuthRequest, res: express.Response) {
     jobs.push(job);
   });
   res.status(200).json({jobs});
+  return;
+}
+
+async function findOne(req: AuthRequest, res: express.Response) {
+  if (req.user == undefined) throw "Undefined user.";
+  //const idType = req.user.type == kUSERS.employee ? "employee.id" : "company.id";
+  // TODO: Should we wrap this in try and catch or does it just return empty if something fails??
+  const data = await JobsCollection.doc(req.params.id).get();
+  const job = {id: data.id, ...data.data()} as Job;
+  res.status(200).json(job);
   return;
 }

@@ -45,6 +45,7 @@ app.delete('/api/admin/:id', [validateToken, isMinAdmin, adminSchema.deletee], (
 // Create
 app.post('/api/job', [validateToken, isCompany, jobSchema.create], (req: any, res: any) => jobService.create(req, res));
 app.get('/api/job', [validateToken, isCompany, jobSchema.read], (req: any, res: any) => jobService.read(req, res));
+app.get('/api/job/:id', [validateToken, isEmployeeOrCompany, jobSchema.read], (req: any, res: any) => jobService.findOne(req, res));
 
 // ENROLLMENT FORMS:
 app.get('/api/user/enrollment-form/:id', [validateToken, formSchema.read], (req: any, res: any) => enrollmentService.readForm(req, res));
