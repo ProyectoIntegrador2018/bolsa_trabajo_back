@@ -45,7 +45,7 @@ export function getUserFormat(user: User) {
 }
 
 export async function getUserById(id: string): Promise<User> {
-  //TODO: Wrap this around try/catch block to not leak stack trace to front-end. 
+  //TODO: Wrap this around try/catch block to not leak stack trace to front-end.
   const user_doc = await UsersCollection.doc(id).get();
   if (!user_doc.exists) throw `User with id(${id} doesn't exist.)`;
   const user = {id, ...user_doc.data()} as User;
@@ -53,7 +53,7 @@ export async function getUserById(id: string): Promise<User> {
 }
 
 export async function getJobById(id: string): Promise<Job> {
-  //TODO: Wrap this around try/catch block to not leak stack trace to front-end. 
+  //TODO: Wrap this around try/catch block to not leak stack trace to front-end.
   const job_doc = await JobsCollection.doc(id).get();
   if (!job_doc.exists) throw `Job with id(${id} doesn't exist.)`;
   const job = {id, ...job_doc.data()} as Job;
@@ -61,7 +61,7 @@ export async function getJobById(id: string): Promise<Job> {
 }
 
 export async function getMatchById(id: string): Promise<Match> {
-  //TODO: Wrap this around try/catch block to not leak stack trace to front-end. 
+  //TODO: Wrap this around try/catch block to not leak stack trace to front-end.
   const match_doc = await MatchesCollection.doc(id).get();
   if (!match_doc.exists) throw `Match with id(${id} doesn't exist.)`;
   const match = {id, ...match_doc.data()} as Match;
@@ -102,7 +102,7 @@ export async function jobBelongsTo(userId: string, jobId: string): Promise<boole
 
 export async function matchBelongsTo(userId: string, matchId: string): Promise<boolean> {
   const match = await getMatchById(matchId);
-  return userId == match.company.id;
+  return (userId == match.company.id || userId == match.employee.id);
 }
 
 export function getWriteResultDate(writeResult: FirebaseFirestore.WriteResult): string {

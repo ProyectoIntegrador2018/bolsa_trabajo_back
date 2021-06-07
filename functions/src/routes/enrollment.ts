@@ -44,9 +44,10 @@ async function readForm(req: AuthRequest, res: express.Response) {
   // company: can see their own form and employees forms
   // admins & super-admins: can see their own form and company and employees forms
   if (paramsId != currId) {
-    if (req.user.type == kUSERS.employee)
-      isAuthorized = false;
-    else if (req.user.type == kUSERS.company) {
+    if (req.user.type == kUSERS.employee) {
+      if (user.type != kUSERS.company)
+        isAuthorized = false;
+    } else if (req.user.type == kUSERS.company) {
       if (user.type != kUSERS.employee)
         isAuthorized = false;
     }
