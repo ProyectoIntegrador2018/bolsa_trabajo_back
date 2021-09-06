@@ -55,6 +55,7 @@ async function create(req: AuthRequest, res: express.Response) {
   const admin_obj = {
     username: data.username,
     email: data.email,
+    phoneNumber: data.phoneNumber,
     type: data.type,
     state: kUSER_STATES.active,
     createdBy,
@@ -125,7 +126,7 @@ async function update(req: AuthRequest, res: any) {
     console.log(updateAdmin);
     // Update database
     writeResult = await UsersCollection.doc(userId).update(
-      getObjFromData(["email", "type", "username", "state"], data));
+      getObjFromData(["email", "type", "username", "state", "phoneNumber"], data));
   } catch (error) {
     console.error(`Failed to update admin(${userId}):${desiredAdmin.username}. ${error}`)
     res.status(403).json({message: "Failed to update admin."});
