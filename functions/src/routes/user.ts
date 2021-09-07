@@ -55,7 +55,11 @@ async function filter(req: AuthRequest, res: any) {
       admin.firestore.FieldPath.documentId(), "in", currEmpIds).get();
     userDocs.forEach(userDoc => {
       const user = {id: userDoc.id, ...userDoc.data()} as User;
-      users.push(user);
+
+      // TODO: quick fix, better to filter on query
+      if(user.type == "employee") {
+        users.push(user);
+      }
     });
   }
   res.status(200).json({users});
